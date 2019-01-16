@@ -26,7 +26,7 @@ export default function departamentos(state = INITIAL_STATE, action) {
     case Types.GET_REQUEST:
       return { ...state, loading: true };
     case Types.GET_SUCCESS:
-      return { data: state.dat, loading: false };
+      return { data: state.data, loading: false };
     default:
       return state;
   }
