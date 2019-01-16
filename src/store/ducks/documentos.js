@@ -2,6 +2,7 @@ export const Types = {
   GET_REQUEST: 'documentos/GET_REQUEST',
   GET_SUCCESS: 'documentos/GET_SUCCESS',
   POST_REQUEST: 'documentos/POST_REQUEST',
+  POST_SUCCESS: 'documentos/POST_SUCCESS',
   DELETE_REQUEST: 'documentos/DELETE_REQUEST',
 };
 
@@ -16,6 +17,8 @@ export default function documentos(state = INITIAL_STATE, action) {
       return { ...state, loading: true };
     case Types.GET_SUCCESS:
       return { data: state.data, loading: false };
+    case Types.POST_SUCCESS:
+      return { data: [...state.data, action.payload.data], loading: false };
     default:
       return state;
   }
@@ -30,11 +33,15 @@ export const Creators = {
   }),
   postDocumentosRequest: data => ({
     type: Types.POST_REQUEST,
-    payload: data,
+    payload: { data },
+  }),
+  postDocumentosSuccess: data => ({
+    type: Types.POST_SUCCESS,
+    payload: { data },
   }),
   putDocumentosRequest: data => ({
     type: Types.PUT_REQUEST,
-    payload: data,
+    payload: { data },
   }),
   deleteDocumentosRequest: data => ({
     type: Types.DELETE_REQUEST,

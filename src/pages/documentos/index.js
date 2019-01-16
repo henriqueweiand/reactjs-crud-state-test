@@ -30,10 +30,10 @@ class Documentos extends Component {
           ) : (
             documentos.map(item => (
               <DocumentosItem
-                key={item.id}
+                key={item.codigo}
               >
-                <td>{item.id}</td>
-                <td>{item.name}</td>
+                <td>{item.codigo}</td>
+                <td>{item.title}</td>
               </DocumentosItem>
             ))
           )}

@@ -35,7 +35,6 @@ class formDocumentos extends Component {
               name: e.target.selectedOptions[0].label,
             },
           ]);
-          // handleChange(e);
         }}
       >
         <option key={0} value="">Selecione</option>
@@ -50,13 +49,21 @@ class formDocumentos extends Component {
 
   renderCategorias = () => {
     const {
-      handleChange, categorias,
+      handleChange, setFieldValue, categorias, values,
     } = this.props;
 
     return (
       <select
         name="categoria"
-        onChange={(handleChange)}
+        onChange={async (e) => {
+          await setFieldValue(e.target.name, [
+            ...values.categoria,
+            {
+              id: e.target.value,
+              name: e.target.selectedOptions[0].label,
+            },
+          ]);
+        }}
       >
         <option value="">Selecione</option>
         {
@@ -148,29 +155,29 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 }, dispatch);
 
 export default compose(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
   withFormik({
     mapPropsToValues: () => ({
       codigo: '',
       title: '',
       departamento: [],
-      categoria: '',
+      categoria: [],
     }),
 
     validationSchema: Yup.object().shape({
       codigo: Yup.string().required('Preencha o campo código'),
       title: Yup.string().required('Preencha o campo title'),
       departamento: Yup.array().min(1).required('Selecione no mínimo um departamento'),
-      categoria: Yup.string().required('Selecione no mínimo uma categoria'),
+      categoria: Yup.array().min(1).max(1).required('Selecione uma categoria'),
     }),
 
     validateOnChange: false,
 
-    handleSubmit: (values) => {
-      console.log(values);
+    handleSubmit: (values, { props }) => {
+      props.postDocumentosRequest(values);
     },
   }),
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
 )(formDocumentos);
