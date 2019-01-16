@@ -21,17 +21,26 @@ class formDocumentos extends Component {
 
   renderDepartamentos = () => {
     const {
-      handleChange, values, departamentos: { data },
+      handleChange, setFieldValue, departamentos, values,
     } = this.props;
 
     return (
       <select
         name="departamento"
-        onChange={handleChange}
+        onChange={async (e) => {
+          await setFieldValue(e.target.name, [
+            ...values.departamento,
+            {
+              id: e.target.value,
+              name: e.target.selectedOptions[0].label,
+            },
+          ]);
+          // handleChange(e);
+        }}
       >
         <option key={0} value="">Selecione</option>
         {
-          data.map(departamento => (
+          departamentos.data.map(departamento => (
             <option key={departamento.id} value={departamento.id}>{departamento.name}</option>
           ))
         }
@@ -41,7 +50,7 @@ class formDocumentos extends Component {
 
   renderCategorias = () => {
     const {
-      handleChange, values, categorias: { data },
+      handleChange, categorias,
     } = this.props;
 
     return (
@@ -51,7 +60,7 @@ class formDocumentos extends Component {
       >
         <option value="">Selecione</option>
         {
-          data.map(categoria => (
+          categorias.data.map(categoria => (
             <option key={categoria.id} value={categoria.id}>{categoria.name}</option>
           ))
         }
@@ -157,7 +166,7 @@ export default compose(
     validateOnChange: false,
 
     handleSubmit: (values) => {
-      console.tron.log(values);
+      console.log(values);
     },
   }),
   connect(
