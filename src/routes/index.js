@@ -2,14 +2,14 @@ import React from 'react';
 
 import { Switch, Route } from 'react-router-dom';
 
-import List from '~/pages/list';
-import Form from '~/pages/form';
+import Documentos from '~/pages/documentos';
+import formDocumentos from '~/pages/formDocumentos';
 
 const Routes = () => (
   <Switch>
-    <Route exact path="/" component={List} />
-    <Route path="/form/:id" component={Form} />
-    <Route exact path="/form" component={Form} />
+    <Route exact path="/" component={Documentos} />
+    <Route exact path="/documentos/create" component={formDocumentos} />
+    <Route path="/documentos/:id" component={formDocumentos} />
   </Switch>
 );
 

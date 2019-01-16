@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
-export default class List extends Component {
+export default class formDocumentos extends Component {
   render() {
     return (
       <div>
-        <span> List </span>
+        <span> formDocumentos </span>
       </div>
     );
   }

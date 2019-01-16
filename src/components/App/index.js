@@ -1,12 +1,17 @@
-import React, { Fragment } from 'react';
+import React from 'react';
+import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+
+import '~/config/reactotron';
+
 import Routes from '~/routes';
+import store from '~/store';
 
 import GlobalStyle from '~/styles/global';
 import { Wrapper, Container } from './styles';
 
 const App = () => (
-  <Fragment>
+  <Provider store={store}>
     <GlobalStyle />
     <BrowserRouter>
       <Wrapper>
@@ -15,7 +20,7 @@ const App = () => (
         </Container>
       </Wrapper>
     </BrowserRouter>
-  </Fragment>
+  </Provider>
 );
 
 export default App;
