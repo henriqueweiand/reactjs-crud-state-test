@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
+import Yup from 'yup';
 
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
@@ -25,8 +26,7 @@ class formDocumentos extends Component {
 
     return (
       <select
-        name="departamentos"
-        value={values.titulo}
+        name="departamento"
         onChange={handleChange}
       >
         <option value="">Selecione</option>
@@ -39,9 +39,29 @@ class formDocumentos extends Component {
     );
   }
 
+  renderCategorias = () => {
+    const {
+      handleChange, values, categorias: { data },
+    } = this.props;
+
+    return (
+      <select
+        name="categoria"
+        onChange={handleChange}
+      >
+        <option value="">Selecione</option>
+        {
+          data.map(categoria => (
+            <option key={categoria.id} value={categoria.id}>{categoria.name}</option>
+          ))
+        }
+      </select>
+    );
+  }
+
   render() {
     const {
-      isSubmitting, handleSubmit, handleChange, values, departamentos,
+      isSubmitting, handleSubmit, handleChange, values, departamentos, categorias, errors,
     } = this.props;
 
     return (
@@ -82,7 +102,17 @@ class formDocumentos extends Component {
 
         <div>
           categoria
-          <input placeholder="categoria" />
+          {
+            categorias.loading ? (
+              <p>Loading</p>
+            ) : (
+              this.renderCategorias()
+            )
+          }
+        </div>
+
+        <div>
+          { errors && JSON.stringify(errors) }
         </div>
 
         <button
@@ -113,8 +143,15 @@ export default compose(
     mapPropsToValues: () => ({
       codigo: '',
       titulo: '',
-      departamentos: [],
-      categorias: '',
+      departamento: [],
+      categoria: '',
+    }),
+
+    validationSchema: Yup.object().shape({
+      codigo: Yup.string().required('Preencha o campo código'),
+      title: Yup.string().required('Preencha o campo title'),
+      departamento: Yup.array().min(1).required('Selecione no mínimo um departamento'),
+      categoria: Yup.string().required('Selecione no mínimo uma categoria'),
     }),
 
     handleSubmit: (values) => {
