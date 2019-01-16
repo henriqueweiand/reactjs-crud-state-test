@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
-import Yup from 'yup';
+import * as Yup from 'yup';
 
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
@@ -29,7 +29,7 @@ class formDocumentos extends Component {
         name="departamento"
         onChange={handleChange}
       >
-        <option value="">Selecione</option>
+        <option key={0} value="">Selecione</option>
         {
           data.map(departamento => (
             <option key={departamento.id} value={departamento.id}>{departamento.name}</option>
@@ -47,7 +47,7 @@ class formDocumentos extends Component {
     return (
       <select
         name="categoria"
-        onChange={handleChange}
+        onChange={(handleChange)}
       >
         <option value="">Selecione</option>
         {
@@ -82,9 +82,9 @@ class formDocumentos extends Component {
           titulo
           <input
             placeholder="titulo"
-            name="titulo"
+            name="title"
             type="text"
-            value={values.titulo}
+            value={values.title}
             onChange={handleChange}
           />
         </div>
@@ -142,7 +142,7 @@ export default compose(
   withFormik({
     mapPropsToValues: () => ({
       codigo: '',
-      titulo: '',
+      title: '',
       departamento: [],
       categoria: '',
     }),
@@ -153,6 +153,8 @@ export default compose(
       departamento: Yup.array().min(1).required('Selecione no mínimo um departamento'),
       categoria: Yup.string().required('Selecione no mínimo uma categoria'),
     }),
+
+    validateOnChange: false,
 
     handleSubmit: (values) => {
       console.tron.log(values);
