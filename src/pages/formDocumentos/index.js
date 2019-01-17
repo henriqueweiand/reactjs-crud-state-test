@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
@@ -66,25 +66,53 @@ class formDocumentos extends Component {
     } = this.props;
 
     return (
-      <select
-        name="departamento"
-        onChange={async (e) => {
-          await setFieldValue(e.target.name, [
-            ...values.departamento,
-            {
-              id: e.target.value,
-              name: e.target.selectedOptions[0].label,
-            },
-          ]);
-        }}
-      >
-        <option key={0} value="">Selecione</option>
+      <Fragment>
+        <select
+          name="departamento"
+          onChange={async (e) => {
+            const index = values.departamento.findIndex(
+              element => (
+                element.id === e.target.value ? element : false
+              ),
+            );
+
+            if (index < 0) {
+              await setFieldValue(e.target.name, [
+                ...values.departamento,
+                {
+                  id: e.target.value,
+                  name: e.target.selectedOptions[0].label,
+                },
+              ]);
+            }
+          }}
+        >
+          <option key={0} value="">Selecione</option>
+          {
+            departamentos.data.map(departamento => (
+              <option key={departamento.id} value={departamento.id}>{departamento.name}</option>
+            ))
+          }
+        </select>
         {
-          departamentos.data.map(departamento => (
-            <option key={departamento.id} value={departamento.id}>{departamento.name}</option>
+          values.departamento.map(departamento => (
+            <div key={departamento.id}>
+              {departamento.name}
+              <button
+                type="button"
+                onClick={() => {
+                  const index = values.departamento.indexOf(departamento);
+
+                  values.departamento.splice(index, 1);
+                  setFieldValue('departamento', values.departamento);
+                }}
+              >
+                  Remover
+              </button>
+            </div>
           ))
         }
-      </select>
+      </Fragment>
     );
   }
 
@@ -122,7 +150,6 @@ class formDocumentos extends Component {
   }
 
   render() {
-    console.log('render');
     const {
       isSubmitting, handleSubmit, handleChange, values, errors, departamentos, categorias,
     } = this.props;
