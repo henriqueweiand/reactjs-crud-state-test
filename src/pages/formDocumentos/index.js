@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -17,9 +17,47 @@ import { Creators as CategoriasActions } from '~/store/ducks/categorias';
 moment.locale('pt-BR');
 
 class formDocumentos extends Component {
+  static propTypes = {
+    isSubmitting: PropTypes.bool,
+    handleSubmit: PropTypes.func.isRequired,
+    handleChange: PropTypes.func.isRequired,
+    errors: PropTypes.shape({}),
+    getCategoriasRequest: PropTypes.func.isRequired,
+    getDepartamentosRequest: PropTypes.func.isRequired,
+    setFieldValue: PropTypes.func.isRequired,
+    departamentos: PropTypes.shape({
+      data: PropTypes.arrayOf(PropTypes.shape({})),
+      loading: PropTypes.bool,
+    }),
+    categorias: PropTypes.shape({
+      data: PropTypes.arrayOf(PropTypes.shape({})),
+      loading: PropTypes.bool,
+    }),
+    values: PropTypes.shape({
+      codigo: PropTypes.string,
+      date: PropTypes.string,
+      title: PropTypes.string,
+      departamento: PropTypes.arrayOf(
+        PropTypes.shape({}),
+      ),
+      categoria: PropTypes.arrayOf(
+        PropTypes.shape({}),
+      ),
+    }).isRequired,
+  };
+
+  static defaultProps = {
+    departamentos: [],
+    categorias: [],
+    errors: {},
+    isSubmitting: false,
+  };
+
   componentDidMount() {
-    this.props.getCategoriasRequest();
-    this.props.getDepartamentosRequest();
+    const { getCategoriasRequest, getDepartamentosRequest } = this.props;
+
+    getCategoriasRequest();
+    getDepartamentosRequest();
   }
 
   renderDepartamentos = () => {
@@ -84,8 +122,9 @@ class formDocumentos extends Component {
   }
 
   render() {
+    console.log('render');
     const {
-      isSubmitting, handleSubmit, handleChange, values, departamentos, categorias, errors,
+      isSubmitting, handleSubmit, handleChange, values, errors, departamentos, categorias,
     } = this.props;
 
     return (
@@ -170,7 +209,7 @@ export default compose(
   withFormik({
     mapPropsToValues: ({ documentos: { data }, match: { params } }) => {
       if (params.codigo) {
-        const documento = data.filter(documento => documento.codigo === params.codigo)[0];
+        const documento = data.filter(item => item.codigo === params.codigo)[0];
 
         return {
           ...documento,
@@ -190,8 +229,8 @@ export default compose(
       codigo: Yup.string().required('Preencha o campo código'),
       date: Yup.date().required('Preencha o campo data'),
       title: Yup.string().required('Preencha o campo title'),
-      departamento: Yup.array().min(1).required('Selecione no mínimo um departamento'),
-      categoria: Yup.array().min(1).max(1).required('Selecione uma categoria'),
+      departamento: Yup.array().required('Selecione no mínimo um departamento').min(1),
+      categoria: Yup.array().required('Selecione uma categoria').min(1).max(1),
     }),
 
     validateOnChange: false,

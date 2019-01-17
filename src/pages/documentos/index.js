@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -12,71 +12,88 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 import { DocumentosTable, DocumentosItem } from './styles';
 
 class Documentos extends Component {
+  static propTypes = {
+    deleteDocumentosRequest: PropTypes.func.isRequired,
+    getDocumentosRequest: PropTypes.func.isRequired,
+    documentos: PropTypes.shape({
+      data: PropTypes.arrayOf(PropTypes.shape({
+        codigo: PropTypes.string,
+        title: PropTypes.string,
+        date: PropTypes.string,
+        departamento: PropTypes.arrayOf(PropTypes.shape({})),
+        categoria: PropTypes.arrayOf(PropTypes.shape({})),
+      })),
+      loading: PropTypes.bool,
+    }).isRequired,
+  };
+
   componentDidMount() {
-    this.props.getDocumentosRequest();
+    const { getDocumentosRequest } = this.props;
+    getDocumentosRequest();
   }
 
   handleRemove = (data) => {
+    const { deleteDocumentosRequest } = this.props;
+
     const toastrConfirmOptions = {
-      onOk: () => this.props.deleteDocumentosRequest(data),
+      onOk: () => deleteDocumentosRequest(data),
     };
 
     toastr.confirm('Deseja realmente excluir este documento?', toastrConfirmOptions);
   }
 
-  renderDocumentos = () => {
-    const documentos = this.props.documentos.data;
+  renderDocumentos = ({ data }) => (
+    <DocumentosTable cellPadding={0} cellSpacing={0}>
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Título</th>
+          <th>Departamento</th>
+          <th>Categoria</th>
+          <th>Data</th>
+          <th />
+        </tr>
+      </thead>
 
-    return (
-      <DocumentosTable cellPadding={0} cellSpacing={0}>
-        <thead>
+      <tbody>
+        {!data.length ? (
           <tr>
-            <th>Código</th>
-            <th>Título</th>
-            <th>Departamento</th>
-            <th>Categoria</th>
-            <th>Data</th>
-            <th />
+            <td colSpan={2}>Nenhuma documento cadastrado</td>
           </tr>
-        </thead>
-
-        <tbody>
-          {!documentos ? (
-            <tr>
-              <td colSpan={2}>Nenhuma documento cadastrado</td>
-            </tr>
-          ) : (
-            documentos.map(item => (
-              <DocumentosItem
-                key={item.codigo}
-              >
-                <td>{item.codigo}</td>
-                <td>{item.title}</td>
-                <td>{JSON.stringify(item.departamento)}</td>
-                <td>{JSON.stringify(item.categoria)}</td>
-                <td>{item.date}</td>
-                <td>
-                  <Link to={`/documentos/${item.codigo}`}>
-                    <FaEdit title="Editar" />
-                  </Link>
-                  <FaTrash
-                    title="Remover"
-                    onClick={() => this.handleRemove(item)}
-                  />
-                </td>
-              </DocumentosItem>
-            ))
-          )}
-        </tbody>
-      </DocumentosTable>
-    );
-  }
+        ) : (
+          data.map(item => (
+            <DocumentosItem
+              key={item.codigo}
+            >
+              <td>{item.codigo}</td>
+              <td>{item.title}</td>
+              <td>{JSON.stringify(item.departamento)}</td>
+              <td>{JSON.stringify(item.categoria)}</td>
+              <td>{item.date}</td>
+              <td>
+                <Link to={`/documentos/${item.codigo}`}>
+                  <FaEdit title="Editar" />
+                </Link>
+                <FaTrash
+                  title="Remover"
+                  onClick={() => this.handleRemove(item)}
+                />
+              </td>
+            </DocumentosItem>
+          ))
+        )}
+      </tbody>
+    </DocumentosTable>
+  )
 
   render() {
-    return this.props.documentos.loading ? (
+    const { documentos } = this.props;
+    const { loading } = documentos;
+
+    return loading ? (
       <p>Loading</p>
     ) : (
-      this.renderDocumentos()
+      this.renderDocumentos(documentos)
     );
   }
 }
