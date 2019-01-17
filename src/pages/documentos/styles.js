@@ -2,8 +2,12 @@ import styled, { css } from 'styled-components';
 import { colors as colorsBase } from '~/styles';
 
 export const ContainerArrayCSS = css`
-  justify-content: center,
-  align-items: center,
+  justify-content: center;
+  align-items: center;
+  border-left: 3px solid ${colorsBase.primary};
+  margin-bottom: 5px;
+  padding-left: 2px;
+  background: ${colorsBase.lighter};
 `;
 
 export const Container = styled.div`

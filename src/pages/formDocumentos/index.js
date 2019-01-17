@@ -217,7 +217,7 @@ class formDocumentos extends Component {
         <Form onSubmit={handleSubmit}>
           <Field title="Código">
             <input
-              placeholder="codigo"
+              placeholder="Código"
               name="codigo"
               type="text"
               value={values.codigo}
@@ -227,7 +227,7 @@ class formDocumentos extends Component {
 
           <Field title="Título">
             <input
-              placeholder="titulo"
+              placeholder="Título"
               name="title"
               type="text"
               value={values.title}
