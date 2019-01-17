@@ -1,23 +1,9 @@
 import styled from 'styled-components';
+import { colors as colorsBase } from '~/styles';
 
 export const Container = styled.div`
   width: 100%;
   flex-direction: column;
-`;
-
-export const Head = styled.div`
-  display: flex;
-  justify-content: space-between
-`;
-
-export const Title = styled.div``;
-
-export const Button = styled.button``;
-
-export const TableReponsive = styled.div`
-  display: block;
-  width: 100%;
-  overflow-x: auto;
 `;
 
 export const DocumentosTable = styled.table`
@@ -38,8 +24,8 @@ export const DocumentosTable = styled.table`
       letter-spacing: 1.11px;
       font-weight: normal;
       vertical-align: bottom;
-      border-bottom: 2px solid #dee2e6;
-      border-top: 1px solid #dee2e6;
+      border-bottom: 2px solid ${colorsBase.lighter};
+      border-top: 1px solid ${colorsBase.lighter};
       padding: .75rem;
     }
   }
@@ -50,7 +36,6 @@ export const DocumentosTable = styled.table`
     line-height: 1.5;
     color: #212529;
     text-align: left;
-    background-color: #fff;
   }
 
   tr {
@@ -62,6 +47,7 @@ export const DocumentosTable = styled.table`
   td {
     padding: .75rem;
     vertical-align: top;
-    border-top: 1px solid #dee2e6;
+    border-top: 1px solid ${colorsBase.lighter};
+    text-align: center;
   }
 `;

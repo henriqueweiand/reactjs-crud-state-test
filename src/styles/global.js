@@ -22,6 +22,11 @@ const GlobalStyle = createGlobalStyle`
   button {
     cursor: pointer;
   }
+  .table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+  }
 `;
 
 export default GlobalStyle;

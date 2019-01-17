@@ -9,12 +9,11 @@ import moment from 'moment';
 
 import { Creators as DocumentosActions } from '~/store/ducks/documentos';
 import Loading from '~/components/Loading';
+import ListArrayItens from '~/components/ListArrayItens';
 
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import {
-  DocumentosTable, TableReponsive, Container, Head, Button, Title,
-} from './styles';
-
+import { DocumentosTable, Container } from './styles';
+import { Button, Bar, Title } from '~/styles/components';
 
 class Documentos extends Component {
   static propTypes = {
@@ -39,16 +38,19 @@ class Documentos extends Component {
 
   handleRemove = (data) => {
     const { deleteDocumentosRequest } = this.props;
-
     const toastrConfirmOptions = {
       onOk: () => deleteDocumentosRequest(data),
     };
 
+    /*
+      a chamada do toaster confirm esta gerando warning no browser
+      todavia, a correção ja esta a caminho, conforme: https://github.com/diegoddox/react-redux-toastr/issues/220
+    */
     toastr.confirm('Deseja realmente excluir este documento?', toastrConfirmOptions);
   }
 
   renderDocumentos = ({ data }) => (
-    <TableReponsive>
+    <div className="table-responsive">
       <DocumentosTable cellPadding={0} cellSpacing={0}>
         <thead>
           <tr>
@@ -64,7 +66,7 @@ class Documentos extends Component {
         <tbody>
           {!data.length ? (
             <tr>
-              <td colSpan={2}>Nenhuma documento cadastrado</td>
+              <td colSpan={6}>Nenhuma documento cadastrado</td>
             </tr>
           ) : (
             data.map(item => (
@@ -73,16 +75,48 @@ class Documentos extends Component {
               >
                 <td>{item.codigo}</td>
                 <td>{item.title}</td>
-                <td>{JSON.stringify(item.departamento)}</td>
-                <td>{JSON.stringify(item.categoria)}</td>
-                <td>{moment(item.date).format('DD/MM/YYYY')}</td>
                 <td>
-                  <Link to={`/documentos/${item.codigo}`}>
-                    <FaEdit title="Editar" />
+                  <ListArrayItens
+                    data={item.departamento}
+                    params={{
+                      id: 'id',
+                      label: 'name',
+                    }}
+                    rootCSS={{
+                      'justify-content': 'center',
+                      'align-items': 'center',
+                    }}
+                  />
+                </td>
+                <td>
+                  <ListArrayItens
+                    data={item.categoria}
+                    params={{
+                      id: 'id',
+                      label: 'name',
+                    }}
+                    rootCSS={{
+                      'justify-content': 'center',
+                      'align-items': 'center',
+                    }}
+                  />
+                </td>
+                <td>
+                  {moment(item.date).format('DD/MM/YYYY')}
+                </td>
+                <td>
+                  <Link
+                    title="Editar"
+                    to={`/documentos/${item.codigo}`}
+                  >
+                    <FaEdit
+                      style={{ color: '#000' }}
+                    />
                   </Link>
                   <FaTrash
                     title="Remover"
                     onClick={() => this.handleRemove(item)}
+                    style={{ cursor: 'pointer' }}
                   />
                 </td>
               </tr>
@@ -90,7 +124,7 @@ class Documentos extends Component {
           )}
         </tbody>
       </DocumentosTable>
-    </TableReponsive>
+    </div>
   )
 
   render() {
@@ -101,16 +135,18 @@ class Documentos extends Component {
       <Loading />
     ) : (
       <Container>
-        <Head>
+        <Bar>
           <Title>Lista de documentos</Title>
           <Link to="/documentos/create">
             <Button
               type="button"
+              color="white"
+              size="default"
             >
               Adicionar
             </Button>
           </Link>
-        </Head>
+        </Bar>
         {this.renderDocumentos(documentos)}
       </Container>
     );
