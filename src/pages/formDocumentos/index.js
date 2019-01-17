@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
@@ -14,14 +14,13 @@ import { Creators as DocumentosActions } from '~/store/ducks/documentos';
 import { Creators as DepartamentosActions } from '~/store/ducks/departamentos';
 import { Creators as CategoriasActions } from '~/store/ducks/categorias';
 
-import {
-  Container, Form, ContainerArrayCSS, TitleArrayCSS,
-} from './styles';
-import { Button, Bar, Title } from '~/styles/components';
 import { FaAngleLeft } from 'react-icons/fa';
-
-import ListArrayItens from '~/components/ListArrayItens';
+import { Button, Bar, Title } from '~/styles/components';
 import Field from '~/components/Field';
+
+import { Container, Form } from './styles';
+import Departamentos from './components/Departamentos';
+import Categorias from './components/Categorias';
 
 moment.locale('pt-BR');
 
@@ -67,10 +66,6 @@ class formDocumentos extends Component {
     isSubmitting: false,
   };
 
-  state = {
-    defaultDepartamento: '',
-  }
-
   componentDidMount() {
     const { getCategoriasRequest, getDepartamentosRequest } = this.props;
 
@@ -78,113 +73,10 @@ class formDocumentos extends Component {
     getDepartamentosRequest();
   }
 
-  renderDepartamentos = () => {
-    const {
-      setFieldValue, departamentos, values,
-    } = this.props;
-
-    const { defaultDepartamento } = this.state;
-
-    return (
-      <Fragment>
-        <select
-          name="departamento"
-          value={defaultDepartamento}
-          onChange={async (e) => {
-            const index = values.departamento.findIndex(
-              element => (
-                element.id === e.target.value ? element : false
-              ),
-            );
-
-            if (index < 0) {
-              await setFieldValue(e.target.name, [
-                ...values.departamento,
-                {
-                  id: e.target.value,
-                  name: e.target.selectedOptions[0].label,
-                },
-              ]);
-
-              this.setState({ defaultDepartamento: '' });
-            }
-          }}
-        >
-          <option key={0} value="">Selecione</option>
-          {
-            departamentos.data.map(departamento => (
-              <option key={departamento.id} value={departamento.id}>{departamento.name}</option>
-            ))
-          }
-        </select>
-
-        <ListArrayItens
-          data={values.departamento}
-          params={{
-            id: 'id',
-            label: 'name',
-          }}
-          css={{
-            container: ContainerArrayCSS,
-            title: TitleArrayCSS,
-          }}
-          customComponent={item => (
-            <Button
-              size="small"
-              color="default"
-              type="button"
-              onClick={() => {
-                const index = values.departamento.indexOf(item.departamento);
-
-                values.departamento.splice(index, 1);
-                setFieldValue('departamento', values.departamento);
-              }}
-            >
-                Remover
-            </Button>
-          )}
-        />
-      </Fragment>
-    );
-  }
-
-  renderCategorias = () => {
-    const {
-      setFieldValue, categorias, values,
-    } = this.props;
-
-    return (
-      <select
-        name="categoria"
-        defaultValue={values.categoria[0] ? values.categoria[0].id : ''}
-        onChange={async (e) => {
-          await setFieldValue(e.target.name, [
-            {
-              id: e.target.value,
-              name: e.target.selectedOptions[0].label,
-            },
-          ]);
-        }}
-      >
-        <option value="">Selecione</option>
-        {
-          categorias.data.map(categoria => (
-            <option
-              key={categoria.id}
-              value={categoria.id}
-            >
-              {categoria.name}
-            </option>
-          ))
-        }
-      </select>
-    );
-  }
-
   render() {
     const {
-      isSubmitting, handleSubmit, handleChange, submitForm, values, errors, departamentos,
-      categorias, history, match: { params },
+      isSubmitting, handleSubmit, handleChange, submitForm, setFieldValue,
+      values, errors, departamentos, categorias, history, match: { params },
     } = this.props;
     return (
       <Container>
@@ -236,11 +128,19 @@ class formDocumentos extends Component {
           </Field>
 
           <Field title="Departamentos" loading={departamentos.loading}>
-            {this.renderDepartamentos()}
+            <Departamentos
+              setFieldValue={setFieldValue}
+              departamentos={departamentos}
+              values={values}
+            />
           </Field>
 
           <Field title="Categoria" loading={categorias.loading}>
-            {this.renderCategorias()}
+            <Categorias
+              setFieldValue={setFieldValue}
+              categorias={categorias}
+              values={values}
+            />
           </Field>
 
           <div>
