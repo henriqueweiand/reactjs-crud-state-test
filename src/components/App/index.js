@@ -1,5 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import ReduxToaster from 'react-redux-toastr';
 import { BrowserRouter } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
 
@@ -17,6 +18,7 @@ const App = () => (
   <Provider store={store}>
     <PersistGate loading={<p>Loading</p>} persistor={persistor}>
       <GlobalStyle />
+      <ReduxToaster />
       <BrowserRouter>
         <Wrapper>
           <Container>

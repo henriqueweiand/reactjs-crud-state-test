@@ -6,12 +6,15 @@ import * as Yup from 'yup';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import moment from 'moment';
+import 'moment/locale/pt-br';
 
 import { Creators as DocumentosActions } from '~/store/ducks/documentos';
 import { Creators as DepartamentosActions } from '~/store/ducks/departamentos';
 import { Creators as CategoriasActions } from '~/store/ducks/categorias';
 
 // import { DocumentosTable, DocumentosItem } from './styles';
+moment.locale('pt-BR');
 
 class formDocumentos extends Component {
   componentDidMount() {
@@ -21,7 +24,7 @@ class formDocumentos extends Component {
 
   renderDepartamentos = () => {
     const {
-      handleChange, setFieldValue, departamentos, values,
+      setFieldValue, departamentos, values,
     } = this.props;
 
     return (
@@ -49,15 +52,15 @@ class formDocumentos extends Component {
 
   renderCategorias = () => {
     const {
-      handleChange, setFieldValue, categorias, values,
+      setFieldValue, categorias, values,
     } = this.props;
 
     return (
       <select
         name="categoria"
+        defaultValue={values.categoria[0] ? values.categoria[0].id : ''}
         onChange={async (e) => {
           await setFieldValue(e.target.name, [
-            ...values.categoria,
             {
               id: e.target.value,
               name: e.target.selectedOptions[0].label,
@@ -68,7 +71,12 @@ class formDocumentos extends Component {
         <option value="">Selecione</option>
         {
           categorias.data.map(categoria => (
-            <option key={categoria.id} value={categoria.id}>{categoria.name}</option>
+            <option
+              key={categoria.id}
+              value={categoria.id}
+            >
+              {categoria.name}
+            </option>
           ))
         }
       </select>
@@ -160,15 +168,27 @@ export default compose(
     mapDispatchToProps,
   ),
   withFormik({
-    mapPropsToValues: () => ({
-      codigo: '',
-      title: '',
-      departamento: [],
-      categoria: [],
-    }),
+    mapPropsToValues: ({ documentos: { data }, match: { params } }) => {
+      if (params.codigo) {
+        const documento = data.filter(documento => documento.codigo === params.codigo)[0];
+
+        return {
+          ...documento,
+        };
+      }
+
+      return {
+        codigo: '',
+        title: '',
+        date: moment().format('YYYY-MM-DD'),
+        departamento: [],
+        categoria: [],
+      };
+    },
 
     validationSchema: Yup.object().shape({
       codigo: Yup.string().required('Preencha o campo código'),
+      date: Yup.date().required('Preencha o campo data'),
       title: Yup.string().required('Preencha o campo title'),
       departamento: Yup.array().min(1).required('Selecione no mínimo um departamento'),
       categoria: Yup.array().min(1).max(1).required('Selecione uma categoria'),
@@ -177,7 +197,13 @@ export default compose(
     validateOnChange: false,
 
     handleSubmit: (values, { props }) => {
-      props.postDocumentosRequest(values);
+      const { match: { params } } = props;
+
+      if (params.codigo) {
+        props.putDocumentosRequest(values, params.codigo);
+      } else {
+        props.postDocumentosRequest(values);
+      }
     },
   }),
 )(formDocumentos);

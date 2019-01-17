@@ -6,14 +6,9 @@ export const DocumentosTable = styled.table`
   margin-top: 20px;
   thead th {
     font-size: 11px;
-    color: #b3b3b3;
     letter-spacing: 1.11px;
     font-weight: normal;
-    text-transform: uppercase;
     padding: 5px 10px;
-    &:last-child {
-      text-align: right;
-    }
   }
 `;
 
@@ -23,15 +18,5 @@ export const DocumentosItem = styled.tr`
     font-size: 13px;
     padding: 0 10px;
     line-height: 40px;
-    &:first-child {
-      width: 80px;
-      text-align: right;
-    }
-    &:last-child {
-      text-align: right;
-    }
-  }
-  &:hover td {
-    background: #282828;
   }
 `;
