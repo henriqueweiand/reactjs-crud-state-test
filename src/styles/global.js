@@ -29,6 +29,7 @@ const GlobalStyle = createGlobalStyle`
     -moz-appearance: none;
     appearance: none;
     background-clip: padding-box;
+    border-radius: 0;
     border: 1px solid ${colorsBase.lighter};
   }
   button {

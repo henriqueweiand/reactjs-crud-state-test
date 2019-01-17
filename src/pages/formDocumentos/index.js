@@ -78,6 +78,7 @@ class formDocumentos extends Component {
       isSubmitting, handleSubmit, handleChange, submitForm, setFieldValue,
       values, errors, departamentos, categorias, history, match: { params },
     } = this.props;
+
     return (
       <Container>
         <Bar>
@@ -107,7 +108,10 @@ class formDocumentos extends Component {
         </Bar>
 
         <Form onSubmit={handleSubmit}>
-          <Field title="Código">
+          <Field
+            title="Código"
+            error={errors.codigo}
+          >
             <input
               placeholder="Código"
               name="codigo"
@@ -117,7 +121,10 @@ class formDocumentos extends Component {
             />
           </Field>
 
-          <Field title="Título">
+          <Field
+            title="Título"
+            error={errors.title}
+          >
             <input
               placeholder="Título"
               name="title"
@@ -127,7 +134,11 @@ class formDocumentos extends Component {
             />
           </Field>
 
-          <Field title="Departamentos" loading={departamentos.loading}>
+          <Field
+            title="Departamentos"
+            loading={departamentos.loading}
+            error={errors.departamento}
+          >
             <Departamentos
               setFieldValue={setFieldValue}
               departamentos={departamentos}
@@ -135,17 +146,17 @@ class formDocumentos extends Component {
             />
           </Field>
 
-          <Field title="Categoria" loading={categorias.loading}>
+          <Field
+            title="Categoria"
+            loading={categorias.loading}
+            error={errors.categoria}
+          >
             <Categorias
               setFieldValue={setFieldValue}
               categorias={categorias}
               values={values}
             />
           </Field>
-
-          <div>
-            { errors && JSON.stringify(errors) }
-          </div>
         </Form>
       </Container>
     );
