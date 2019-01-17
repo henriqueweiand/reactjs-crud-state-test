@@ -8,11 +8,10 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 
 import { Creators as DocumentosActions } from '~/store/ducks/documentos';
-import Loading from '~/components/Loading';
 import ListArrayItens from '~/components/ListArrayItens';
 
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import { DocumentosTable, Container } from './styles';
+import { DocumentosTable, Container, ContainerArrayCSS } from './styles';
 import { Button, Bar, Title } from '~/styles/components';
 
 class Documentos extends Component {
@@ -82,9 +81,8 @@ class Documentos extends Component {
                       id: 'id',
                       label: 'name',
                     }}
-                    rootCSS={{
-                      'justify-content': 'center',
-                      'align-items': 'center',
+                    css={{
+                      container: ContainerArrayCSS,
                     }}
                   />
                 </td>
@@ -95,9 +93,8 @@ class Documentos extends Component {
                       id: 'id',
                       label: 'name',
                     }}
-                    rootCSS={{
-                      'justify-content': 'center',
-                      'align-items': 'center',
+                    css={{
+                      container: ContainerArrayCSS,
                     }}
                   />
                 </td>
@@ -109,15 +106,9 @@ class Documentos extends Component {
                     title="Editar"
                     to={`/documentos/${item.codigo}`}
                   >
-                    <FaEdit
-                      style={{ color: '#000' }}
-                    />
+                    <FaEdit />
                   </Link>
-                  <FaTrash
-                    title="Remover"
-                    onClick={() => this.handleRemove(item)}
-                    style={{ cursor: 'pointer' }}
-                  />
+                  <FaTrash title="Remover" onClick={() => this.handleRemove(item)} />
                 </td>
               </tr>
             ))
@@ -129,11 +120,8 @@ class Documentos extends Component {
 
   render() {
     const { documentos } = this.props;
-    const { loading } = documentos;
 
-    return loading ? (
-      <Loading />
-    ) : (
+    return (
       <Container>
         <Bar>
           <Title>Lista de documentos</Title>

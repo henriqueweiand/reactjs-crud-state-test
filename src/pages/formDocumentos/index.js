@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
+import _ from 'lodash';
 
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
@@ -13,17 +14,28 @@ import { Creators as DocumentosActions } from '~/store/ducks/documentos';
 import { Creators as DepartamentosActions } from '~/store/ducks/departamentos';
 import { Creators as CategoriasActions } from '~/store/ducks/categorias';
 
-// import { DocumentosTable, DocumentosItem } from './styles';
-import Loading from '~/components/Loading';
+import {
+  Container, Form, ContainerArrayCSS, TitleArrayCSS,
+} from './styles';
+import { Button, Bar, Title } from '~/styles/components';
+import { FaAngleLeft } from 'react-icons/fa';
+
+import ListArrayItens from '~/components/ListArrayItens';
+import Field from '~/components/Field';
 
 moment.locale('pt-BR');
 
 class formDocumentos extends Component {
   static propTypes = {
     isSubmitting: PropTypes.bool,
+    history: PropTypes.shape({}).isRequired,
+    submitForm: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     handleChange: PropTypes.func.isRequired,
     errors: PropTypes.shape({}),
+    match: PropTypes.shape({
+      params: PropTypes.shape({}),
+    }).isRequired,
     getCategoriasRequest: PropTypes.func.isRequired,
     getDepartamentosRequest: PropTypes.func.isRequired,
     setFieldValue: PropTypes.func.isRequired,
@@ -105,24 +117,33 @@ class formDocumentos extends Component {
             ))
           }
         </select>
-        {
-          values.departamento.map(departamento => (
-            <div key={departamento.id}>
-              {departamento.name}
-              <button
-                type="button"
-                onClick={() => {
-                  const index = values.departamento.indexOf(departamento);
 
-                  values.departamento.splice(index, 1);
-                  setFieldValue('departamento', values.departamento);
-                }}
-              >
-                  Remover
-              </button>
-            </div>
-          ))
-        }
+        <ListArrayItens
+          data={values.departamento}
+          params={{
+            id: 'id',
+            label: 'name',
+          }}
+          css={{
+            container: ContainerArrayCSS,
+            title: TitleArrayCSS,
+          }}
+          customComponent={item => (
+            <Button
+              size="small"
+              color="default"
+              type="button"
+              onClick={() => {
+                const index = values.departamento.indexOf(item.departamento);
+
+                values.departamento.splice(index, 1);
+                setFieldValue('departamento', values.departamento);
+              }}
+            >
+                Remover
+            </Button>
+          )}
+        />
       </Fragment>
     );
   }
@@ -162,67 +183,71 @@ class formDocumentos extends Component {
 
   render() {
     const {
-      isSubmitting, handleSubmit, handleChange, values, errors, departamentos, categorias,
+      isSubmitting, handleSubmit, handleChange, submitForm, values, errors, departamentos,
+      categorias, history, match: { params },
     } = this.props;
-
     return (
-      <form onSubmit={handleSubmit}>
-        <div>formDocumentos</div>
-        <div>
-          codigo
-          <input
-            placeholder="codigo"
-            name="codigo"
-            type="text"
-            value={values.codigo}
-            onChange={handleChange}
+      <Container>
+        <Bar>
+          <FaAngleLeft
+            onClick={() => history.goBack()}
           />
-        </div>
+          <Title>
+            {
+              _.isEmpty(params)
+                ? 'Cadastro de documento '
+                : `Alteração de documento - ${values.title}`
+            }
+          </Title>
+          <Button
+            type="button"
+            onClick={submitForm}
+            disabled={isSubmitting}
+            color="white"
+            size="default"
+          >
+            {
+              _.isEmpty(params)
+                ? 'Salvar'
+                : 'Atualizar'
+            }
+          </Button>
+        </Bar>
 
-        <div>
-          titulo
-          <input
-            placeholder="titulo"
-            name="title"
-            type="text"
-            value={values.title}
-            onChange={handleChange}
-          />
-        </div>
+        <Form onSubmit={handleSubmit}>
+          <Field title="Código">
+            <input
+              placeholder="codigo"
+              name="codigo"
+              type="text"
+              value={values.codigo}
+              onChange={handleChange}
+            />
+          </Field>
 
-        <div>
-          departamentos
-          {
-            departamentos.loading ? (
-              <Loading />
-            ) : (
-              this.renderDepartamentos()
-            )
-          }
-        </div>
+          <Field title="Título">
+            <input
+              placeholder="titulo"
+              name="title"
+              type="text"
+              value={values.title}
+              onChange={handleChange}
+            />
+          </Field>
 
-        <div>
-          categoria
-          {
-            categorias.loading ? (
-              <Loading />
-            ) : (
-              this.renderCategorias()
-            )
-          }
-        </div>
+          <Field title="Departamentos" loading={departamentos.loading}>
+            {this.renderDepartamentos()}
+          </Field>
 
-        <div>
-          { errors && JSON.stringify(errors) }
-        </div>
+          <Field title="Categoria" loading={categorias.loading}>
+            {this.renderCategorias()}
+          </Field>
 
-        <button
-          type="submit"
-          disabled={isSubmitting}
-        >
-          Enviar
-        </button>
-      </form>
+          <div>
+            { errors && JSON.stringify(errors) }
+          </div>
+        </Form>
+      </Container>
     );
   }
 }
@@ -276,10 +301,10 @@ export default compose(
     handleSubmit: (values, { props, setSubmitting }) => {
       const { match: { params } } = props;
 
-      if (params.codigo) {
-        props.putDocumentosRequest(values, params.codigo);
-      } else {
+      if (_.isEmpty(params)) {
         props.postDocumentosRequest(values);
+      } else {
+        props.putDocumentosRequest(values, params.codigo);
       }
       setSubmitting(false);
     },

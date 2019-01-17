@@ -3,19 +3,19 @@ import PropTypes from 'prop-types';
 import { Container, Title } from './styles';
 
 const ListArrayItens = ({
-  data, params, customComponent, rootCSS,
+  data, params, customComponent, css,
 }) => (
   data.map((item) => {
     const id = item[params.id];
     const label = item[params.label];
 
     return (
-      <Container key={id} rootCSS={rootCSS}>
-        <Title>
+      <Container key={id} css={css}>
+        <Title css={css}>
           {label}
         </Title>
 
-        {!!customComponent && customComponent}
+        {!!customComponent && customComponent(item)}
       </Container>
     );
   })
@@ -27,7 +27,6 @@ ListArrayItens.propTypes = {
     id: PropTypes.string,
     label: PropTypes.label,
   }).isRequired,
-  rootCSS: PropTypes.shape({}),
 };
 
 ListArrayItens.defaultProps = {

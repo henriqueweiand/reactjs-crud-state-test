@@ -1,5 +1,10 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { colors as colorsBase } from '~/styles';
+
+export const ContainerArrayCSS = css`
+  justify-content: center,
+  align-items: center,
+`;
 
 export const Container = styled.div`
   width: 100%;
@@ -49,5 +54,15 @@ export const DocumentosTable = styled.table`
     vertical-align: top;
     border-top: 1px solid ${colorsBase.lighter};
     text-align: center;
+
+    svg {
+      cursor: pointer;
+      margin-left: 10px;
+      color: ${colorsBase.dark};
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
   }
 `;

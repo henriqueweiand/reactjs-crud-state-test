@@ -7,6 +7,12 @@ const Bar = styled.div`
   align-items: center;
   background: ${colorsBase.primary};
   padding: .75rem;
+
+  svg {
+    color: ${colorsBase.light};
+    font-size: 1.5rem;
+    padding-right: 10px;
+  }
 `;
 
 export default Bar;

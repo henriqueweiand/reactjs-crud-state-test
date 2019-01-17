@@ -7,7 +7,7 @@ import { Creators as DocumentosActions } from '~/store/ducks/documentos';
 function* codigoExists(codigo, ignore) {
   const documentos = yield select(state => state.documentos.data);
   const exists = documentos.filter((documento) => {
-    if (parseInt(ignore, 10) === parseInt(documento.codigo, 10)) return false;
+    if (String(ignore) === String(documento.codigo)) return false;
     return documento.codigo === codigo;
   });
   return exists.length > 0;

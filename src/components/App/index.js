@@ -18,7 +18,12 @@ const App = () => (
   <Provider store={store}>
     <PersistGate loading={<p>Loading</p>} persistor={persistor}>
       <GlobalStyle />
-      <ReduxToaster />
+      <ReduxToaster
+        position="top-center"
+        transitionIn="fadeIn"
+        transitionOut="fadeOut"
+        progressBar
+      />
       <BrowserRouter>
         <Wrapper>
           <Container>
