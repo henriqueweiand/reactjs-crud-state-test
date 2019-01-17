@@ -14,6 +14,8 @@ import { Creators as DepartamentosActions } from '~/store/ducks/departamentos';
 import { Creators as CategoriasActions } from '~/store/ducks/categorias';
 
 // import { DocumentosTable, DocumentosItem } from './styles';
+import Loading from '~/components/Loading';
+
 moment.locale('pt-BR');
 
 class formDocumentos extends Component {
@@ -192,7 +194,7 @@ class formDocumentos extends Component {
           departamentos
           {
             departamentos.loading ? (
-              <p>Loading</p>
+              <Loading />
             ) : (
               this.renderDepartamentos()
             )
@@ -203,7 +205,7 @@ class formDocumentos extends Component {
           categoria
           {
             categorias.loading ? (
-              <p>Loading</p>
+              <Loading />
             ) : (
               this.renderCategorias()
             )

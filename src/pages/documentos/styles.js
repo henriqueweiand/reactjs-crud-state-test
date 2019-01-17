@@ -1,13 +1,33 @@
 import styled from 'styled-components';
 
-export const DocumentosTable = styled.table`
-  border-collapse: collapse;
+export const Container = styled.div`
   width: 100%;
-  text-align: left;
+  flex-direction: column;
+`;
+
+export const Head = styled.div`
+  display: flex;
+  justify-content: space-between
+`;
+
+export const Title = styled.div``;
+
+export const Button = styled.button``;
+
+export const TableReponsive = styled.div`
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+`;
+
+export const DocumentosTable = styled.table`
+  width: 100%;
+  margin-bottom: 1rem;
+  background-color: transparent;
+  border-collapse: collapse;
   display: table;
   border-spacing: 2px;
   border-color: grey;
-  background-color: transparent;
 
   thead {
     display: table-header-group;
@@ -32,12 +52,13 @@ export const DocumentosTable = styled.table`
     text-align: left;
     background-color: #fff;
   }
-`;
 
-export const DocumentosItem = styled.tr`
-  display: table-row;
-  vertical-align: inherit;
-  border-color: inherit;
+  tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+  }
+
   td {
     padding: .75rem;
     vertical-align: top;
