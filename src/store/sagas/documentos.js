@@ -4,6 +4,15 @@ import { push } from 'connected-react-router';
 
 import { Creators as DocumentosActions } from '~/store/ducks/documentos';
 
+function* codigoExists(codigo, ignore) {
+  const documentos = yield select(state => state.documentos.data);
+  const exists = documentos.filter((documento) => {
+    if (parseInt(ignore, 10) === parseInt(documento.codigo, 10)) return false;
+    return documento.codigo === codigo;
+  });
+  return exists.length > 0;
+}
+
 export function* getDocumentos() {
   try {
     // Aqui ficaria como se fosse feita a request para o servidor
@@ -16,30 +25,44 @@ export function* getDocumentos() {
 }
 
 export function* postDocumentos(action) {
-  try {
-    const documentos = yield select(state => state.documentos.data);
-    documentos.push(action.payload.data);
-    yield call(toastr.success, 'Sucesso', 'Seu documento foi registrado');
+  const documento = action.payload.data;
 
-    yield put(DocumentosActions.postDocumentosSuccess(documentos));
-    yield put(push('/'));
+  try {
+    const exists = yield call(codigoExists, documento.codigo);
+
+    if (!exists) {
+      const documentos = yield select(state => state.documentos.data);
+      documentos.push(documento);
+
+      yield call(toastr.success, 'Sucesso', 'Seu documento foi registrado');
+      yield put(DocumentosActions.postDocumentosSuccess(documentos));
+      yield put(push('/'));
+    } else {
+      yield call(toastr.error, 'Erro', 'O código informado em em uso');
+    }
   } catch (err) {
     yield call(toastr.error, 'Erro', 'Não foi possivel registrar o documento');
   }
 }
 
 export function* putDocumentos(action) {
+  const documento = action.payload.data;
+  const { codigo } = action.payload;
+
   try {
-    const documentos = yield select(state => state.documentos.data);
-    const documento = action.payload.data;
-    const { codigo } = action.payload;
+    const exists = yield call(codigoExists, documento.codigo, codigo);
 
-    const index = documentos.findIndex(element => (element.codigo === codigo ? element : false));
-    documentos[index] = documento;
+    if (!exists) {
+      const documentos = yield select(state => state.documentos.data);
+      const index = documentos.findIndex(element => (element.codigo === codigo ? element : false));
+      documentos[index] = documento;
 
-    yield call(toastr.success, 'Sucesso', 'Seu documento foi atualizado');
-    yield put(DocumentosActions.putDocumentosSuccess(documentos));
-    yield put(push('/'));
+      yield call(toastr.success, 'Sucesso', 'Seu documento foi atualizado');
+      yield put(DocumentosActions.putDocumentosSuccess(documentos));
+      yield put(push('/'));
+    } else {
+      yield call(toastr.error, 'Erro', 'O código informado em em uso');
+    }
   } catch (err) {
     yield call(toastr.error, 'Erro', 'Não foi possivel atualizar o documento');
   }

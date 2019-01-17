@@ -196,7 +196,7 @@ export default compose(
 
     validateOnChange: false,
 
-    handleSubmit: (values, { props }) => {
+    handleSubmit: (values, { props, setSubmitting }) => {
       const { match: { params } } = props;
 
       if (params.codigo) {
@@ -204,6 +204,7 @@ export default compose(
       } else {
         props.postDocumentosRequest(values);
       }
+      setSubmitting(false);
     },
   }),
 )(formDocumentos);

@@ -14,6 +14,7 @@ const Routes = () => (
       <Route exact path="/" component={Documentos} />
       <Route exact path="/documentos/create" component={formDocumentos} />
       <Route path="/documentos/:codigo" component={formDocumentos} />
+      <Route component={Documentos} />
     </Switch>
   </ConnectedRouter>
 );
