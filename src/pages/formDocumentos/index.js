@@ -53,6 +53,10 @@ class formDocumentos extends Component {
     isSubmitting: false,
   };
 
+  state = {
+    defaultDepartamento: '',
+  }
+
   componentDidMount() {
     const { getCategoriasRequest, getDepartamentosRequest } = this.props;
 
@@ -65,10 +69,13 @@ class formDocumentos extends Component {
       setFieldValue, departamentos, values,
     } = this.props;
 
+    const { defaultDepartamento } = this.state;
+
     return (
       <Fragment>
         <select
           name="departamento"
+          value={defaultDepartamento}
           onChange={async (e) => {
             const index = values.departamento.findIndex(
               element => (
@@ -84,6 +91,8 @@ class formDocumentos extends Component {
                   name: e.target.selectedOptions[0].label,
                 },
               ]);
+
+              this.setState({ defaultDepartamento: '' });
             }
           }}
         >
