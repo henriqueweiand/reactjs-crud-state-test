@@ -25,17 +25,15 @@ export function* getDocumentos() {
 }
 
 export function* postDocumentos(action) {
-  const documento = action.payload.data;
-
   try {
+    const documento = action.payload.data;
     const exists = yield call(codigoExists, documento.codigo);
 
     if (!exists) {
-      const documentos = yield select(state => state.documentos.data);
-      documentos.push(documento);
+      // chama API para salvar nos servidor
 
       yield call(toastr.success, 'Sucesso', 'Seu documento foi registrado');
-      yield put(DocumentosActions.postDocumentosSuccess(documentos));
+      yield put(DocumentosActions.postDocumentosSuccess(documento));
       yield put(push('/'));
     } else {
       yield call(toastr.error, 'Erro', 'O código informado em em uso');
@@ -46,19 +44,16 @@ export function* postDocumentos(action) {
 }
 
 export function* putDocumentos(action) {
-  const documento = action.payload.data;
-  const { codigo } = action.payload;
-
   try {
+    const documento = action.payload.data;
+    const { codigo } = action.payload;
     const exists = yield call(codigoExists, documento.codigo, codigo);
 
     if (!exists) {
-      const documentos = yield select(state => state.documentos.data);
-      const index = documentos.findIndex(element => (element.codigo === codigo ? element : false));
-      documentos[index] = documento;
+      // chama API para atualizar nos servidor
 
       yield call(toastr.success, 'Sucesso', 'Seu documento foi atualizado');
-      yield put(DocumentosActions.putDocumentosSuccess(documentos));
+      yield put(DocumentosActions.putDocumentosSuccess(documento, codigo));
       yield put(push('/'));
     } else {
       yield call(toastr.error, 'Erro', 'O código informado em em uso');
@@ -70,14 +65,11 @@ export function* putDocumentos(action) {
 
 export function* deleteDocumentos(action) {
   try {
-    const documentos = yield select(state => state.documentos.data);
     const documento = action.payload.data;
-    const index = documentos.indexOf(documento);
-
-    documentos.splice(index, 1);
+    // chama API para deletar nos servidor
 
     yield call(toastr.success, 'Sucesso', 'Seu documento foi removido');
-    yield put(DocumentosActions.deleteDocumentosSuccess(documentos));
+    yield put(DocumentosActions.deleteDocumentosSuccess(documento.codigo));
   } catch (err) {
     yield call(toastr.error, 'Erro', 'Não foi possivel remover o documento');
   }

@@ -116,6 +116,7 @@ class formDocumentos extends Component {
           >
             <InputMask
               mask="****"
+              maskChar=""
               placeholder="Código"
               name="codigo"
               type="text"
@@ -138,18 +139,6 @@ class formDocumentos extends Component {
           </Field>
 
           <Field
-            title="Departamentos"
-            loading={departamentos.loading}
-            error={errors.departamento}
-          >
-            <Departamentos
-              setFieldValue={setFieldValue}
-              departamentos={departamentos}
-              values={values}
-            />
-          </Field>
-
-          <Field
             title="Categoria"
             loading={categorias.loading}
             error={errors.categoria}
@@ -157,6 +146,18 @@ class formDocumentos extends Component {
             <Categorias
               setFieldValue={setFieldValue}
               categorias={categorias}
+              values={values}
+            />
+          </Field>
+
+          <Field
+            title="Departamentos"
+            loading={departamentos.loading}
+            error={errors.departamento}
+          >
+            <Departamentos
+              setFieldValue={setFieldValue}
+              departamentos={departamentos}
               values={values}
             />
           </Field>

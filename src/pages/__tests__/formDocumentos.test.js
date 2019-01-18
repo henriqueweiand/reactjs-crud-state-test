@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import formDocumentos from './index';
+import formDocumentos from '../formDocumentos';
 import createMockStore from 'redux-mock-store';
 
 import { Creators as DocumentosActions } from '~/store/ducks/departamentos';

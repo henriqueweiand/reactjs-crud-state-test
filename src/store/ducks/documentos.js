@@ -21,15 +21,31 @@ export default function documentos(state = INITIAL_STATE, action) {
     case Types.GET_SUCCESS:
       return { data: action.payload.data || [], loading: false };
     case Types.POST_SUCCESS:
-      return { data: action.payload.data, loading: false };
+      return {
+        data: [
+          ...state.data,
+          action.payload.data,
+        ],
+        loading: false,
+      };
     case Types.DELETE_REQUEST:
       return { ...state, loading: true };
     case Types.DELETE_SUCCESS:
-      return { data: action.payload.data || [], loading: false };
+      return {
+        data: state.data.filter(documento => documento.codigo !== action.payload.codigo),
+        loading: false,
+      };
     case Types.PUT_REQUEST:
       return { ...state, loading: true };
     case Types.PUT_SUCCESS:
-      return { data: action.payload.data, loading: false };
+      return {
+        data: state.data.map(documento => (
+          (String(documento.codigo) === String(action.payload.codigo))
+            ? action.payload.data
+            : documento
+        )),
+        loading: false,
+      };
     default:
       return state;
   }
@@ -55,16 +71,16 @@ export const Creators = {
     type: Types.PUT_REQUEST,
     payload: { data, codigo },
   }),
-  putDocumentosSuccess: data => ({
+  putDocumentosSuccess: (data, codigo) => ({
     type: Types.PUT_SUCCESS,
-    payload: { data },
+    payload: { data, codigo },
   }),
   deleteDocumentosRequest: data => ({
     type: Types.DELETE_REQUEST,
     payload: { data },
   }),
-  deleteDocumentosSuccess: data => ({
+  deleteDocumentosSuccess: codigo => ({
     type: Types.DELETE_SUCCESS,
-    payload: { data },
+    payload: { codigo },
   }),
 };
