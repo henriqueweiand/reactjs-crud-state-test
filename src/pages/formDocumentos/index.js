@@ -7,6 +7,7 @@ import _ from 'lodash';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import InputMask from 'react-input-mask';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 
@@ -22,7 +23,8 @@ import { Container, Form } from './styles';
 import Departamentos from './components/Departamentos';
 import Categorias from './components/Categorias';
 
-moment.locale('pt-BR');
+moment.updateLocale('pt-BR');
+// moment.locale('pt-BR');
 
 class formDocumentos extends Component {
   static propTypes = {
@@ -112,7 +114,8 @@ class formDocumentos extends Component {
             title="Código"
             error={errors.codigo}
           >
-            <input
+            <InputMask
+              mask="****"
               placeholder="Código"
               name="codigo"
               type="text"
