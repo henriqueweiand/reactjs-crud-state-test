@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import formDocumentos from '../documentos';
+import Documentos from '../documentos';
 import createMockStore from 'redux-mock-store';
 
 import { Creators as DocumentosActions } from '~/store/ducks/departamentos';
@@ -53,18 +53,20 @@ const INITIAL_STATE = {
 const mockStore = createMockStore();
 const store = mockStore(INITIAL_STATE);
 
-describe('formDocumentos component', () => {
-  xit('Should be able to remove documentos', () => {
-    const wrapper = shallow(<formDocumentos />, { context: { store } });
+describe('Documentos component', () => {
+  fit('Should be able to remove documentos', () => {
+    const wrapper = shallow(<Documentos />, { context: { store } }).dive();
 
-    wrapper
-      .dive()
-      .find('FaTrash')
-      .first()
-      .simulate('click');
-
-    expect(store.getActions()).toContainEqual(
-      DocumentosActions.deleteDocumentosRequest(INITIAL_STATE.documentos[0].codigo),
+    // wrapper
+    //   .dive()
+    //   .find('FaTrash')
+    //   .first()
+    //   .simulate('click');
+    console.log(
+      wrapper.html(),
     );
+    // expect(store.getActions()).toContainEqual(
+    //   DocumentosActions.deleteDocumentosRequest(INITIAL_STATE.documentos[0].codigo),
+    // );
   });
 });
