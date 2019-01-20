@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
@@ -27,7 +27,13 @@ class Documentos extends Component {
         categoria: PropTypes.arrayOf(PropTypes.shape({})),
       })),
       loading: PropTypes.bool,
-    }).isRequired,
+    }),
+  };
+
+  static defaultProps = {
+    documentos: {
+      data: [],
+    },
   };
 
   componentDidMount() {
@@ -70,6 +76,7 @@ class Documentos extends Component {
           ) : (
             data.map(item => (
               <tr
+                className="documentosItem"
                 key={item.codigo}
               >
                 <td>{item.codigo}</td>
@@ -122,21 +129,23 @@ class Documentos extends Component {
     const { documentos } = this.props;
 
     return (
-      <Container>
-        <Bar>
-          <Title>Lista de documentos</Title>
-          <Link to="/documentos/create">
-            <Button
-              type="button"
-              color="white"
-              size="default"
-            >
-              Adicionar
-            </Button>
-          </Link>
-        </Bar>
-        {this.renderDocumentos(documentos)}
-      </Container>
+      <Fragment>
+        <Container>
+          <Bar>
+            <Title>Lista de documentos</Title>
+            <Link to="/documentos/create">
+              <Button
+                type="button"
+                color="white"
+                size="default"
+              >
+                  Adicionar
+              </Button>
+            </Link>
+          </Bar>
+          {this.renderDocumentos(documentos)}
+        </Container>
+      </Fragment>
     );
   }
 }
@@ -145,6 +154,9 @@ const mapStateToProps = state => ({
   documentos: state.documentos,
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({ ...DocumentosActions }, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators(DocumentosActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Documentos);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Documentos);

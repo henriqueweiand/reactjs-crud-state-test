@@ -29,7 +29,7 @@ moment.updateLocale('pt-BR');
 class formDocumentos extends Component {
   static propTypes = {
     isSubmitting: PropTypes.bool,
-    history: PropTypes.shape({}).isRequired,
+    history: PropTypes.shape({}),
     submitForm: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     handleChange: PropTypes.func.isRequired,
@@ -43,11 +43,11 @@ class formDocumentos extends Component {
     departamentos: PropTypes.shape({
       data: PropTypes.arrayOf(PropTypes.shape({})),
       loading: PropTypes.bool,
-    }),
+    }).isRequired,
     categorias: PropTypes.shape({
       data: PropTypes.arrayOf(PropTypes.shape({})),
       loading: PropTypes.bool,
-    }),
+    }).isRequired,
     values: PropTypes.shape({
       codigo: PropTypes.string,
       date: PropTypes.string,
@@ -62,10 +62,9 @@ class formDocumentos extends Component {
   };
 
   static defaultProps = {
-    departamentos: [],
-    categorias: [],
     errors: {},
     isSubmitting: false,
+    history: {},
   };
 
   componentDidMount() {
@@ -80,7 +79,6 @@ class formDocumentos extends Component {
       isSubmitting, handleSubmit, handleChange, submitForm, setFieldValue,
       values, errors, departamentos, categorias, history, match: { params },
     } = this.props;
-
     return (
       <Container>
         <Bar>
@@ -94,8 +92,9 @@ class formDocumentos extends Component {
                 : `Alteração de documento - ${values.title}`
             }
           </Title>
-          <Button
+          <button
             type="button"
+            className="teste"
             onClick={submitForm}
             disabled={isSubmitting}
             color="white"
@@ -106,7 +105,7 @@ class formDocumentos extends Component {
                 ? 'Salvar'
                 : 'Atualizar'
             }
-          </Button>
+          </button>
         </Bar>
 
         <Form onSubmit={handleSubmit}>
@@ -115,7 +114,7 @@ class formDocumentos extends Component {
             error={errors.codigo}
           >
             <InputMask
-              mask="****"
+              mask="********************************"
               maskChar=""
               placeholder="Código"
               name="codigo"

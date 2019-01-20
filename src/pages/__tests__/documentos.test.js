@@ -1,72 +1,54 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
+import { MemoryRouter } from 'react-router-dom';
+import configureStore from 'redux-mock-store';
+import { Provider } from 'react-redux';
 import Documentos from '../documentos';
-import createMockStore from 'redux-mock-store';
 
-import { Creators as DocumentosActions } from '~/store/ducks/departamentos';
-
-const INITIAL_STATE = {
-  documentos: {
-    data: [
-      {
-        codigo: 'aa',
-        title: 'Title 1',
-        date: '2019-01-17',
-        departamento: [
-          {
-            id: 1,
-            name: 'Desenvolvimento',
-          },
-          {
-            id: 2,
-            name: 'Comercial',
-          },
-        ],
-        categoria: [
-          {
-            id: 1,
-            name: 'Procedimentos operacionais',
-          },
-        ],
-      },
-      {
-        codigo: '22',
-        title: 'Title 2',
-        date: '2019-01-18',
-        departamento: [
-          {
-            id: 2,
-            name: 'Comercial',
-          },
-        ],
-        categoria: [
-          {
-            id: 1,
-            name: 'Procedimentos operacionais',
-          },
-        ],
-      },
-    ],
-  },
-};
-
-const mockStore = createMockStore();
-const store = mockStore(INITIAL_STATE);
+import { Creators as DocumentosActions } from '~/store/ducks/documentos';
 
 describe('Documentos component', () => {
-  fit('Should be able to remove documentos', () => {
-    const wrapper = shallow(<Documentos />, { context: { store } }).dive();
+  const INITIAL_STATE = {
+    loading: false,
+    documentos: {
+      data: [
+        {
+          codigo: '1',
+          title: 'Documento teste 1',
+          departamento: [],
+          categoria: [],
+          date: '2019-01-01',
+        },
+      ],
+    },
+  };
 
-    // wrapper
-    //   .dive()
-    //   .find('FaTrash')
-    //   .first()
-    //   .simulate('click');
-    console.log(
-      wrapper.html(),
+  const mockStore = configureStore();
+
+  let store;
+  let wrapper;
+
+  beforeEach(() => {
+    store = mockStore(INITIAL_STATE);
+    wrapper = mount(
+      <MemoryRouter>
+        <Provider store={store}><Documentos /></Provider>
+      </MemoryRouter>,
     );
-    // expect(store.getActions()).toContainEqual(
-    //   DocumentosActions.deleteDocumentosRequest(INITIAL_STATE.documentos[0].codigo),
-    // );
+  });
+
+  it('Should be able to render', () => {
+    expect(wrapper.find(Documentos).length).toEqual(1);
+  });
+
+  it('Check Prop matches with initialState', () => {
+    expect(store.getState()).toEqual(INITIAL_STATE);
+  });
+
+  it('Should be able to render a list', () => {
+    const { documentos: { data } } = INITIAL_STATE;
+
+    store.dispatch(DocumentosActions.getDocumentosSuccess(data));
+    expect(wrapper.find('.documentosItem').length).toEqual(1);
   });
 });
