@@ -80,12 +80,10 @@ describe('FormDocumentos component', () => {
         values={newDocumentos}
       />,
       { context: { store } },
-    );
+    ).dive();
 
-    const render = wrapper.dive().dive();
-
-    const teste = render.find('button');
-    console.log(teste);
+    wrapper.find('button').simulate('click');
+    console.log(store.getActions());
 
     // expect(store.getActions()).toContainEqual(
     //   DocumentosActions.postDocumentosSuccess(newDocumentos),
