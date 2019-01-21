@@ -1,8 +1,16 @@
 import { put, select, call } from 'redux-saga/effects';
 import { toastr } from 'react-redux-toastr';
 import { push } from 'connected-react-router';
+import _ from 'lodash';
 
 import { Creators as DocumentosActions } from '~/store/ducks/documentos';
+
+function* sort() {
+  const documentos = yield select(state => state.documentos.data);
+  const newOrder = _.sortBy(documentos, 'title');
+
+  return newOrder;
+}
 
 function* codigoExists(codigo, ignore) {
   const documentos = yield select(state => state.documentos.data);
@@ -16,7 +24,7 @@ function* codigoExists(codigo, ignore) {
 export function* getDocumentos() {
   try {
     // Aqui ficaria como se fosse feita a request para o servidor
-    const documentos = yield select(state => state.documentos.data);
+    const documentos = yield call(sort);
 
     yield put(DocumentosActions.getDocumentosSuccess(documentos));
   } catch (err) {

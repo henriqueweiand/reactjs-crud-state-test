@@ -95,7 +95,7 @@ class FormDocumentos extends Component {
           <button
             type="button"
             className="teste"
-            onClick={submitForm}
+            onClick={() => console.log('testeeee')}
             disabled={isSubmitting}
             color="white"
             size="default"

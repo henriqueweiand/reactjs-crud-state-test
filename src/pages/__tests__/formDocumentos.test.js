@@ -1,9 +1,8 @@
 import React from 'react';
-import { mount, shallow, render } from 'enzyme';
+import { shallow } from 'enzyme';
 import createStore from 'redux-mock-store';
-import FormDocumentos from '../FormDocumentos';
-import { Provider } from 'react-redux';
-import documentos, { Creators as DocumentosActions } from '~/store/ducks/documentos';
+import FormDocumentos from '../formDocumentos';
+import { Creators as DocumentosActions } from '~/store/ducks/documentos';
 
 const mockStore = createStore();
 const newDocumentos = {
@@ -77,15 +76,22 @@ describe('FormDocumentos component', () => {
     wrapper = shallow(
       <FormDocumentos
         match={INITIAL_STATE.match}
-        values={newDocumentos}
+        values={{ values: newDocumentos }}
       />,
       { context: { store } },
-    ).dive();
+    ).dive().dive();
 
-    const teste = wrapper.find('button').simulate('click');
+    const teste = wrapper
+      .find('FormDocumentos')
+      .dive()
+      // .debug();
+      .find('form')
+      .simulate('submit');
+
+    // console.log(wrapper.props());
 
     console.log(teste);
-    // console.log(store.getState());
+    // console.log(wrapper.props());
   });
 
   // it('Should be able to add new document', () => {
