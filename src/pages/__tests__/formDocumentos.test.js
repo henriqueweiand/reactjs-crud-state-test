@@ -1,7 +1,7 @@
 import React from 'react';
-import { mount, shallow } from 'enzyme';
+import { mount, shallow, render } from 'enzyme';
 import createStore from 'redux-mock-store';
-import FormDocumentos from '../formDocumentos';
+import FormDocumentos from '../FormDocumentos';
 import { Provider } from 'react-redux';
 import documentos, { Creators as DocumentosActions } from '~/store/ducks/documentos';
 
@@ -26,6 +26,7 @@ const newDocumentos = {
 
 describe('FormDocumentos component', () => {
   const INITIAL_STATE = {
+    values: newDocumentos,
     match: {
       params: {},
     },
@@ -77,14 +78,15 @@ describe('FormDocumentos component', () => {
       <FormDocumentos
         match={INITIAL_STATE.match}
         values={newDocumentos}
-        store={store}
       />,
       { context: { store } },
-    ).dive();
+    );
 
-    const teste = wrapper.debug();
+    const render = wrapper.dive().dive();
+
+    const teste = render.find('button');
     console.log(teste);
-    // console.log(store.getState());
+
     // expect(store.getActions()).toContainEqual(
     //   DocumentosActions.postDocumentosSuccess(newDocumentos),
     // );

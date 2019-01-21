@@ -26,7 +26,7 @@ import Categorias from './components/Categorias';
 moment.updateLocale('pt-BR');
 // moment.locale('pt-BR');
 
-class formDocumentos extends Component {
+class FormDocumentos extends Component {
   static propTypes = {
     isSubmitting: PropTypes.bool,
     history: PropTypes.shape({}),
@@ -223,4 +223,4 @@ export default compose(
       setSubmitting(false);
     },
   }),
-)(formDocumentos);
+)(FormDocumentos);
