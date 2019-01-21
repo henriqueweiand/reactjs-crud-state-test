@@ -82,15 +82,10 @@ describe('FormDocumentos component', () => {
       { context: { store } },
     ).dive();
 
-    wrapper.find('button').simulate('click');
-    console.log(store.getActions());
+    const teste = wrapper.find('button').simulate('click');
 
-    // expect(store.getActions()).toContainEqual(
-    //   DocumentosActions.postDocumentosSuccess(newDocumentos),
-    // );
-
-
-    // wrapper.find('form').instance().props.handleSubmit(newDocumentos, { resetForm });
+    console.log(teste);
+    // console.log(store.getState());
   });
 
   // it('Should be able to add new document', () => {
