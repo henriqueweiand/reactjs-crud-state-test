@@ -85,13 +85,6 @@ describe('FormDocumentos component', () => {
       .find('button')
       .simulate('click');
 
-    wrapper
-      .dive()
-      .dive()
-      .find('FormDocumentos')
-      .props()
-      .submitForm();
-
     const teste = wrapper
       .dive()
       .dive()
