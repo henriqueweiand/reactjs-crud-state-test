@@ -7,7 +7,7 @@ import { Creators as DocumentosActions } from '~/store/ducks/documentos';
 const mockStore = createStore();
 const newDocumentos = {
   codigo: 12,
-  name: 'Teste pelo Enzyme',
+  title: 'Teste pelo Enzyme',
   date: '2019-01-18',
   departamento: [
     {
@@ -73,25 +73,26 @@ describe('FormDocumentos component', () => {
 
   fit('teste', () => {
     store = mockStore(INITIAL_STATE);
-    wrapper = shallow(
-      <FormDocumentos
-        match={INITIAL_STATE.match}
-        values={{ values: newDocumentos }}
-      />,
-      { context: { store } },
-    ).dive().dive();
+    wrapper = shallow(<FormDocumentos match={INITIAL_STATE.match} values={newDocumentos} />, {
+      context: { store },
+    });
 
-    const teste = wrapper
+    wrapper
+      .dive()
+      .dive()
       .find('FormDocumentos')
       .dive()
-      // .debug();
-      .find('form')
-      .simulate('submit');
+      .find('#submitting')
+      .simulate('click');
 
-    // console.log(wrapper.props());
+    wrapper.update();
 
-    console.log(teste);
-    // console.log(wrapper.props());
+    console.log(
+      wrapper
+        .dive()
+        .dive()
+        .props(),
+    );
   });
 
   // it('Should be able to add new document', () => {

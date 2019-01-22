@@ -94,7 +94,6 @@ class FormDocumentos extends Component {
           </Title>
           <button
             type="button"
-            id="submitting"
             onClick={submitForm}
             disabled={isSubmitting}
             color="white"
@@ -108,7 +107,7 @@ class FormDocumentos extends Component {
           </button>
         </Bar>
 
-        <form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit}>
           <Field
             title="Código"
             error={errors.codigo}
@@ -160,7 +159,7 @@ class FormDocumentos extends Component {
               values={values}
             />
           </Field>
-        </form>
+        </Form>
       </Container>
     );
   }
