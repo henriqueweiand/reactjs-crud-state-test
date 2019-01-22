@@ -82,17 +82,23 @@ describe('FormDocumentos component', () => {
       .dive()
       .find('FormDocumentos')
       .dive()
-      .find('#submitting')
+      .find('button')
       .simulate('click');
 
-    wrapper.update();
+    wrapper
+      .dive()
+      .dive()
+      .find('FormDocumentos')
+      .props()
+      .submitForm();
 
-    console.log(
-      wrapper
-        .dive()
-        .dive()
-        .props(),
-    );
+    const teste = wrapper
+      .dive()
+      .dive()
+      .find('FormDocumentos')
+      .props();
+
+    console.log(teste);
   });
 
   // it('Should be able to add new document', () => {
