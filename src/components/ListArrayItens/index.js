@@ -12,7 +12,7 @@ const ListArrayItens = ({
         const label = item[params.label];
 
         return (
-          <Container key={id} css={css}>
+          <Container className="itemListArrayItens" key={id} css={css}>
             <Title css={css}>
               {label}
             </Title>

@@ -1,11 +1,12 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import { MemoryRouter } from 'react-router-dom';
-import configureStore from 'redux-mock-store';
-import { Provider } from 'react-redux';
+import createStore from 'redux-mock-store';
 import Documentos from '../documentos';
 
 import { Creators as DocumentosActions } from '~/store/ducks/documentos';
+
+const mockStore = createStore();
 
 describe('Documentos component', () => {
   const INITIAL_STATE = {
@@ -23,17 +24,16 @@ describe('Documentos component', () => {
     },
   };
 
-  const mockStore = configureStore();
-
   let store;
   let wrapper;
 
   beforeEach(() => {
     store = mockStore(INITIAL_STATE);
-    wrapper = mount(
+    wrapper = shallow(
       <MemoryRouter>
-        <Provider store={store}><Documentos /></Provider>
+        <Documentos />
       </MemoryRouter>,
+      { context: { store } },
     );
   });
 
@@ -45,10 +45,13 @@ describe('Documentos component', () => {
     expect(store.getState()).toEqual(INITIAL_STATE);
   });
 
-  it('Should be able to render a list', () => {
+  fit('Should be able to remove a document', () => {
     const { documentos: { data } } = INITIAL_STATE;
 
-    store.dispatch(DocumentosActions.getDocumentosSuccess(data));
-    expect(wrapper.find('.documentosItem').length).toEqual(1);
+    store.dispatch(DocumentosActions.deleteDocumentosSuccess(data[0].codigo));
+
+    expect(store.getActions()).toContainEqual(
+      DocumentosActions.deleteDocumentosSuccess(data[0].codigo),
+    );
   });
 });

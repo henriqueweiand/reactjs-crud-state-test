@@ -24,11 +24,9 @@ import Departamentos from './components/Departamentos';
 import Categorias from './components/Categorias';
 
 moment.updateLocale('pt-BR');
-// moment.locale('pt-BR');
 
 class FormDocumentos extends Component {
   static propTypes = {
-    isSubmitting: PropTypes.bool,
     history: PropTypes.shape({}),
     submitForm: PropTypes.func.isRequired,
     handleSubmit: PropTypes.func.isRequired,
@@ -40,31 +38,20 @@ class FormDocumentos extends Component {
     getCategoriasRequest: PropTypes.func.isRequired,
     getDepartamentosRequest: PropTypes.func.isRequired,
     setFieldValue: PropTypes.func.isRequired,
-    departamentos: PropTypes.shape({
-      data: PropTypes.arrayOf(PropTypes.shape({})),
-      loading: PropTypes.bool,
-    }).isRequired,
-    categorias: PropTypes.shape({
-      data: PropTypes.arrayOf(PropTypes.shape({})),
-      loading: PropTypes.bool,
-    }).isRequired,
+    departamentos: PropTypes.shape({}),
+    categorias: PropTypes.shape({}),
     values: PropTypes.shape({
-      // codigo: PropTypes.string,
+      codigo: PropTypes.string,
       date: PropTypes.string,
       title: PropTypes.string,
-      departamento: PropTypes.arrayOf(
-        PropTypes.shape({}),
-      ),
-      categoria: PropTypes.arrayOf(
-        PropTypes.shape({}),
-      ),
     }).isRequired,
   };
 
   static defaultProps = {
     errors: {},
-    isSubmitting: false,
     history: {},
+    departamentos: {},
+    categorias: {},
   };
 
   componentDidMount() {
@@ -76,7 +63,7 @@ class FormDocumentos extends Component {
 
   render() {
     const {
-      isSubmitting, handleSubmit, handleChange, submitForm, setFieldValue,
+      handleSubmit, handleChange, submitForm, setFieldValue,
       values, errors, departamentos, categorias, history, match: { params },
     } = this.props;
     return (
@@ -96,7 +83,6 @@ class FormDocumentos extends Component {
             type="button"
             id="btnSave"
             onClick={submitForm}
-            disabled={isSubmitting}
             color="white"
             size="default"
           >

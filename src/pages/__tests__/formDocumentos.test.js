@@ -6,7 +6,7 @@ import { Creators as DocumentosActions } from '~/store/ducks/documentos';
 
 const mockStore = createStore();
 const newDocumentos = {
-  codigo: 12,
+  codigo: '12',
   title: 'Teste pelo Enzyme',
   date: '2019-01-18',
   departamento: [
@@ -31,57 +31,25 @@ describe('FormDocumentos component', () => {
     documentos: {
       data: [],
     },
-    departamentos: {
-      loading: false,
-      data: [
-        {
-          id: 1,
-          name: 'Desenvolvimento',
-        },
-        {
-          id: 2,
-          name: 'Comercial',
-        },
-        {
-          id: 3,
-          name: 'Suporte',
-        },
-      ],
-    },
-    categorias: {
-      loading: false,
-      data: [
-        {
-          id: 1,
-          name: 'Procedimentos operacionais',
-        },
-        {
-          id: 2,
-          name: 'Formulários padrões',
-        },
-        {
-          id: 3,
-          name: 'Planejamento de processo',
-        },
-      ],
-    },
   };
 
   let store;
   let wrapper;
 
-  function tick() {
+  function hackToFormik() {
     return new Promise((resolve) => {
       setTimeout(resolve, 0);
     });
   }
 
-  fit('teste', async () => {
+  beforeEach(() => {
     store = mockStore(INITIAL_STATE);
     wrapper = shallow(<FormDocumentos match={INITIAL_STATE.match} values={newDocumentos} />, {
       context: { store },
     });
+  });
 
+  it('Should be able to add a new document', async () => {
     wrapper
       .dive()
       .dive()
@@ -90,7 +58,7 @@ describe('FormDocumentos component', () => {
       .find('#btnSave')
       .simulate('click');
 
-    await tick();
+    await hackToFormik();
     expect(store.getActions()).toContainEqual(
       DocumentosActions.postDocumentosRequest(newDocumentos),
     );
