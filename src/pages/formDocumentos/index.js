@@ -49,7 +49,7 @@ class FormDocumentos extends Component {
       loading: PropTypes.bool,
     }).isRequired,
     values: PropTypes.shape({
-      codigo: PropTypes.string,
+      // codigo: PropTypes.string,
       date: PropTypes.string,
       title: PropTypes.string,
       departamento: PropTypes.arrayOf(
@@ -92,12 +92,10 @@ class FormDocumentos extends Component {
                 : `Alteração de documento - ${values.title}`
             }
           </Title>
-          <button
+          <Button
             type="button"
-            onClick={() => {
-              console.log('toma essa');
-              submitForm();
-            }}
+            id="btnSave"
+            onClick={submitForm}
             disabled={isSubmitting}
             color="white"
             size="default"
@@ -107,7 +105,7 @@ class FormDocumentos extends Component {
                 ? 'Salvar'
                 : 'Atualizar'
             }
-          </button>
+          </Button>
         </Bar>
 
         <Form onSubmit={handleSubmit}>
@@ -186,7 +184,7 @@ export default compose(
     mapDispatchToProps,
   ),
   withFormik({
-    mapPropsToValues: ({ documentos: { data }, match: { params } }) => {
+    mapPropsToValues: ({ values, documentos: { data }, match: { params } }) => {
       if (params.codigo) {
         const documento = data.filter(item => item.codigo === params.codigo)[0];
 
@@ -195,7 +193,7 @@ export default compose(
         };
       }
 
-      return {
+      return values || {
         codigo: '',
         title: '',
         date: moment().format('YYYY-MM-DD'),

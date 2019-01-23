@@ -14,7 +14,7 @@ export default class Departamentos extends Component {
       loading: PropTypes.bool,
     }),
     values: PropTypes.shape({
-      codigo: PropTypes.string,
+      // codigo: PropTypes.string,
       date: PropTypes.string,
       title: PropTypes.string,
       departamento: PropTypes.arrayOf(

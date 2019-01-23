@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const Categorias = ({ setFieldValue, categorias, values }) => (
   <select
     name="categoria"
-    defaultValue={values.categoria[0] ? values.categoria[0].id : ''}
+    defaultValue={values.categoria[0] ? values.categoria[0] : ''}
     onChange={async (e) => {
       await setFieldValue(e.target.name, [
         {
@@ -35,7 +35,7 @@ Categorias.propTypes = {
     loading: PropTypes.bool,
   }),
   values: PropTypes.shape({
-    codigo: PropTypes.string,
+    // codigo: PropTypes.string,
     date: PropTypes.string,
     title: PropTypes.string,
     departamento: PropTypes.arrayOf(

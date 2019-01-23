@@ -25,7 +25,6 @@ const newDocumentos = {
 
 describe('FormDocumentos component', () => {
   const INITIAL_STATE = {
-    values: newDocumentos,
     match: {
       params: {},
     },
@@ -71,7 +70,13 @@ describe('FormDocumentos component', () => {
   let store;
   let wrapper;
 
-  fit('teste', () => {
+  function tick() {
+    return new Promise((resolve) => {
+      setTimeout(resolve, 0);
+    });
+  }
+
+  fit('teste', async () => {
     store = mockStore(INITIAL_STATE);
     wrapper = shallow(<FormDocumentos match={INITIAL_STATE.match} values={newDocumentos} />, {
       context: { store },
@@ -82,23 +87,12 @@ describe('FormDocumentos component', () => {
       .dive()
       .find('FormDocumentos')
       .dive()
-      .find('button')
+      .find('#btnSave')
       .simulate('click');
 
-    const teste = wrapper
-      .dive()
-      .dive()
-      .find('FormDocumentos')
-      .props();
-
-    console.log(teste);
+    await tick();
+    expect(store.getActions()).toContainEqual(
+      DocumentosActions.postDocumentosRequest(newDocumentos),
+    );
   });
-
-  // it('Should be able to add new document', () => {
-  //   store.dispatch(DocumentosActions.postDocumentosSuccess(newDocumentos));
-
-  //   const { documentos: { data } } = store.getState();
-
-  //   expect(data).toEqual(1);
-  // });
 });
