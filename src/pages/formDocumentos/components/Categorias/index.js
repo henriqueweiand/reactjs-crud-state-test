@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const Categorias = ({ setFieldValue, categorias, values }) => (
   <select
     name="categoria"
-    defaultValue={values.categoria[0] ? values.categoria[0] : ''}
+    defaultValue={values.categoria[0].id ? values.categoria[0].id : ''}
     onChange={async (e) => {
       await setFieldValue(e.target.name, [
         {
