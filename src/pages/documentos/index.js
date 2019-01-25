@@ -7,6 +7,7 @@ import { toastr } from 'react-redux-toastr';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
+import Loading from '~/components/Loading';
 import { Creators as DocumentosActions } from '~/store/ducks/documentos';
 import ListArrayItens from '~/components/ListArrayItens';
 
@@ -143,7 +144,11 @@ class Documentos extends Component {
               </Button>
             </Link>
           </Bar>
-          {this.renderDocumentos(documentos)}
+          {
+            documentos.loading
+              ? <Loading />
+              : this.renderDocumentos(documentos)
+          }
         </Container>
       </Fragment>
     );
