@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
@@ -130,27 +130,25 @@ class Documentos extends Component {
     const { documentos } = this.props;
 
     return (
-      <Fragment>
-        <Container>
-          <Bar>
-            <Title>Lista de documentos</Title>
-            <Link to="/documentos/create">
-              <Button
-                type="button"
-                color="white"
-                size="default"
-              >
-                  Adicionar
-              </Button>
-            </Link>
-          </Bar>
-          {
-            documentos.loading
-              ? <Loading />
-              : this.renderDocumentos(documentos)
-          }
-        </Container>
-      </Fragment>
+      <Container>
+        <Bar>
+          <Title>Lista de documentos</Title>
+          <Link to="/documentos/create">
+            <Button
+              type="button"
+              color="white"
+              size="default"
+            >
+                Adicionar
+            </Button>
+          </Link>
+        </Bar>
+        {
+          documentos.loading
+            ? <Loading />
+            : this.renderDocumentos(documentos)
+        }
+      </Container>
     );
   }
 }
